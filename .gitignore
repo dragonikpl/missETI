@@ -4,3 +4,9 @@
 *.jar
 *.war
 *.ear
+/missETI/nbproject/private/
+/missETI/build/
+/missETI/dist/
+/missETI/.DS_Store
+/missETI/src/.DS_Store
+.DS_Store
