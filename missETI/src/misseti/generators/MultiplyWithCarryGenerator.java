@@ -1,17 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package misseti.generators;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author imac
- */
-public class MultiplyWithCarryGenerator {
+public class MultiplyWithCarryGenerator extends Generator {
     /// <summary>
     /// ilosc parametrow a
     /// </summary>
@@ -19,8 +12,6 @@ public class MultiplyWithCarryGenerator {
     private int r;
     private List<Integer> c;
     private List<Integer> a;
-    private List<Integer> X;
-    private int m;
     private int n;
 
     public MultiplyWithCarryGenerator() {
@@ -42,6 +33,7 @@ public class MultiplyWithCarryGenerator {
 
     }
 
+    @Override
     public int Next() {
         int next = 0; // x_n
         int c_i = 0; // c_i+1

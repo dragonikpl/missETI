@@ -2,17 +2,11 @@
 package misseti.generators;
 
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- *
- * @author ldomaradzki
- */
-public class InversiveGenerator {
+public class InversiveGenerator extends Generator {
     
     private int a, c;
-    private int m;
-    private List X;
+
     
     public InversiveGenerator() {
         X = new ArrayList<Integer>();
@@ -26,7 +20,8 @@ public class InversiveGenerator {
         X.add(x0);
     }
     
-    public int Next() {
+    @Override
+     public int Next() {
         int next, previous;
         previous = (Integer) X.get(X.size() - 1);
         
