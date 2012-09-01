@@ -69,19 +69,25 @@ public class RandomSpheresTest
 
                 for (int j = 0; j < pointNumber; j++)
                 {
-                    if (i == j)
+                    if (i == j) 
+                    {
                         continue;
+                    }
 
                     Point3D neighbour = points.get(j);
                     double temp = Math.pow(Double.valueOf(neighbour.x - p.x), 2) + Math.pow(Double.valueOf(neighbour.y - p.y), 2) + Math.pow(Double.valueOf(neighbour.z - p.z), 2);
                     double distance = Math.sqrt(temp);
 
-                    if (distance < p.radius)
+                    if (distance < p.radius) 
+                    {
                         p.radius = distance;
+                    }
                 }
 
-                if (p.radius < minRadius)
+                if (p.radius < minRadius) 
+                {
                     minRadius = p.radius;
+                }
             }
 
             double mean = 0.0;
@@ -97,8 +103,10 @@ public class RandomSpheresTest
 
             double p = 1.0 - Math.exp(-Math.pow(minRadius, 3.0) / 30);
             
-            if (p >= 0.05 && p <= 0.95)
+            if (p >= 0.05 && p <= 0.95) 
+            {
                 passes++;
+            }
 
             System.out.println("MEAN: " + mean);
             System.out.println("[LOOP " + (loop + 1) + "] P = " + p);
