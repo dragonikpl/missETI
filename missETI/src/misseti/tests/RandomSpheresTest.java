@@ -16,14 +16,14 @@ public class RandomSpheresTest
             
     public class Point3D
     {
-        public long x;
-        public long y;
-        public long z;
+        public double x;
+        public double y;
+        public double z;
         public double radius;
     }
 
     public static final double MAXRADIUS = Double.MAX_VALUE;
-    public static final int loops = 20;
+    public static final int loops = 1;
     public long edge;
     public long pointNumber;
     public double minRadius;
@@ -50,33 +50,23 @@ public class RandomSpheresTest
         {
             points = new ArrayList<Point3D>();
             minRadius = MAXRADIUS;
-            
 
             for (int i = 0; i < pointNumber; i++)
             {   
                 Point3D p = new Point3D();
-                p.x = generator.getRandom() % edge;
-                p.y = generator.getRandom() % edge;
-                p.z = generator.getRandom() % edge;
+                
+                p.x = Double.valueOf(generator.getRandom() % edge);
+                p.y = Double.valueOf(generator.getRandom() % edge);
+                p.z = Double.valueOf(generator.getRandom() % edge);
                 p.radius = MAXRADIUS;
 
-                points.add(i, p);
-            }
-
-            for (int i = 0; i < pointNumber; i++)
-            {   
-                Point3D p = points.get(i);
-
-                for (int j = 0; j < pointNumber; j++)
+                for (Point3D neighbour : points)
                 {
-                    if (i == j) 
-                    {
-                        continue;
-                    }
-
-                    Point3D neighbour = points.get(j);
-                    double temp = Math.pow(Double.valueOf(neighbour.x - p.x), 2) + Math.pow(Double.valueOf(neighbour.y - p.y), 2) + Math.pow(Double.valueOf(neighbour.z - p.z), 2);
-                    double distance = Math.sqrt(temp);
+                    double dX = Math.pow(neighbour.x - p.x, 2);
+                    double dY = Math.pow(neighbour.y - p.y, 2);
+                    double dZ = Math.pow(neighbour.z - p.z, 2);
+                    
+                    double distance = Math.sqrt(dX + dY + dZ);
 
                     if (distance < p.radius) 
                     {
@@ -88,6 +78,8 @@ public class RandomSpheresTest
                 {
                     minRadius = p.radius;
                 }
+                
+                points.add(i, p);
             }
 
             double mean = 0.0;
@@ -95,7 +87,8 @@ public class RandomSpheresTest
             for (int i = 0; i < pointNumber; i++)
             {
                 Point3D p = points.get(i);
-                //System.out.println(p.radius);
+                //System.out.println(Math.pow(p.radius, 3.0));
+                System.out.println(p.radius);
                 mean += p.radius;
             }
 
