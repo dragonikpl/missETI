@@ -4,6 +4,9 @@
  */
 package misseti;
 
+import misseti.generators.XorShiftGenerator;
+import misseti.tests.RandomSpheresTest;
+
 
 /**
  *
@@ -16,7 +19,9 @@ public class MissETI {
      */
     public static void main(String[] args) 
     {
-        System.out.println("Hello World!");
+        XorShiftGenerator gen = new XorShiftGenerator();
+        RandomSpheresTest test = new RandomSpheresTest(gen, 1000, 4000);
         
+        test.runTest();
     }
 }
