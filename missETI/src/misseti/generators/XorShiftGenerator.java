@@ -45,6 +45,8 @@ public class XorShiftGenerator implements GenericGenerator
     @Override
     public long getRandom() 
     {
+        //http://javamex.com/tutorials/random_numbers/xorshift.shtml
+        
         x ^= (x << 21);
         x ^= (x >>> 35);
         x ^= (x << 4);

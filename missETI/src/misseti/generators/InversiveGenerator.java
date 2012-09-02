@@ -1,59 +1,55 @@
-
 package misseti.generators;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class InversiveGenerator extends Generator {
-    
-    private int a, c;
+public class InversiveGenerator implements GenericGenerator {
 
-    
+    private int a = 630360016;
+    private int c = 23;
+    private int M = (2 << 23) + 1;
+    private int x;
+    private List allValues;
+
     public InversiveGenerator() {
-        X = new ArrayList<Integer>();
+        x = (int) System.nanoTime();
+        allValues = new ArrayList<Integer>();
+        allValues.add(x);
     }
-    
-    public void Initialize(int a, int c, int m, int x0) {
-        this.a = a;
-        this.c = c;
-        this.m = m;
-        
-        X.add(x0);
-    }
-    
+
     @Override
-     public int Next() {
+    public long getRandom() {
+
         int next, previous;
-        previous = (Integer) X.get(X.size() - 1);
-        
+
+        previous = (Integer) allValues.get(allValues.size() - 1);
+
         if (previous != 0) {
-            next = (a * modInverse(previous, m) + c) % m;
+            next = (a * modInverse(previous, M) + c) % M;
+
         } else {
+
             next = c;
         }
-        
-        
-        X.add(next);
-        
+
+        allValues.add(next);
         return next;
     }
 
-    int modInverse(int a, int n) {
-        
-        int i = n, v = 0, d = 1;
-        while (a > 0) 
-        {
-            int t = i / a, x = a;
-            a = i % x;
-            i = x;
-            x = d;
-            d = v - t * x;
-        }     
-        
-        v %= n;      
-        if (v < 0) {
-            v = (v + n) % n;
-        }
-        return v;
-        
+    int modInverse(int x, int m) {
+        int s = m, t = x; /* set up for gcd(x,m) */
+            int p = 0, b = 1; /* 0*x = s and 1*x = t */
+
+            int q, r, temp;
+
+            while(t != 0) 
+            {
+                q = s/t; r = s%t; /* quotient and remainder */
+                s = t; t = r; /* push back */
+                temp = (p-b*q) % m;
+                p = b; b = temp; /* push back */
+            }
+
+            return p;
     }
 }
