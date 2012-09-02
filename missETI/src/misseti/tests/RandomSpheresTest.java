@@ -5,6 +5,7 @@
 package misseti.tests;
 
 import java.util.ArrayList;
+import java.util.Random;
 import misseti.generators.GenericGenerator;
 
 /**
@@ -21,12 +22,16 @@ public class RandomSpheresTest
         public double z;
         public double radius;
     }
+    
+    public static double exp(double val) {
+    final long tmp = (long) (1512775 * val + (1072693248 - 60801));
+    return Double.longBitsToDouble(tmp << 32);
+}
 
     public static final double MAXRADIUS = Double.MAX_VALUE;
-    public static final int loops = 1;
+    public static final int loops = 20;
     public long edge;
     public long pointNumber;
-    public double minRadius;
     public GenericGenerator generator;
     public ArrayList<Point3D> points;
     
@@ -43,78 +48,70 @@ public class RandomSpheresTest
     
     public boolean runTest()
     {
-        int passes = 0;
-        double result;
+        double[] pValues = new double[loops];
+        points = new ArrayList<Point3D>();
+        double minRadius, minRadius3;
+        
         
         for (int loop = 0; loop < loops; loop++)
         {
-            points = new ArrayList<Point3D>();
+            points.clear();
             minRadius = MAXRADIUS;
+            minRadius3 = 0.0;
 
             for (int i = 0; i < pointNumber; i++)
-            {   
+            {
                 Point3D p = new Point3D();
-                
+                            
                 p.x = Double.valueOf(generator.getRandom() % edge);
                 p.y = Double.valueOf(generator.getRandom() % edge);
                 p.z = Double.valueOf(generator.getRandom() % edge);
                 p.radius = MAXRADIUS;
 
                 for (Point3D neighbour : points)
-                {
-                    double dX = Math.pow(neighbour.x - p.x, 2);
-                    double dY = Math.pow(neighbour.y - p.y, 2);
-                    double dZ = Math.pow(neighbour.z - p.z, 2);
+                { 
+                    double dX = neighbour.x - p.x;
+                    double dY = neighbour.y - p.y;
+                    double dZ = neighbour.z - p.z;
                     
-                    double distance = Math.sqrt(dX + dY + dZ);
-
-                    if (distance < p.radius) 
+                    double r2 = dX * dX + dY * dY + dZ * dZ;
+                    double r1 = Math.sqrt(r2);
+                    double r3 = r2 * r1;
+                    
+                    if (r1 < minRadius)
                     {
-                        p.radius = distance;
+                        minRadius = r1;
+                        minRadius3 = r3;
                     }
                 }
-
-                if (p.radius < minRadius) 
-                {
-                    minRadius = p.radius;
-                }
+                
+                //System.out.println(p.radius);
                 
                 points.add(i, p);
             }
 
-            double mean = 0.0;
-
-            for (int i = 0; i < pointNumber; i++)
-            {
-                Point3D p = points.get(i);
-                //System.out.println(Math.pow(p.radius, 3.0));
-                System.out.println(p.radius);
-                mean += p.radius;
-            }
-
-            mean = mean / Double.valueOf(pointNumber);
-
-            double p = 1.0 - Math.exp(-Math.pow(minRadius, 3.0) / 30);
+            double p = 1.0 - exp(-1.0 * minRadius3 / 30.0);
             
-            if (p >= 0.05 && p <= 0.95) 
-            {
-                passes++;
-            }
+            pValues[loop] = p;
 
-            System.out.println("MEAN: " + mean);
+            System.out.println("MINRADIUS: " + minRadius);
+            System.out.println("MINRADIUS3: " + minRadius3);
             System.out.println("[LOOP " + (loop + 1) + "] P = " + p);
         }
         
-        result = Double.valueOf(passes) / loops;
+        KSTest ks = new KSTest();
         
-        if (result > 0.5)
+        boolean result;
+        result = ks.runTest(pValues);
+        
+        if (result == true)
         {
-            System.out.println("TEST PASSED\nResult: " + String.valueOf(result));
+            System.out.println("TEST PASSED");
             return true;
         }
         else
         {
-            System.out.println("TEST FAILED\nResult: " + String.valueOf(result));
+            System.out.println("TEST FAILED");
             return false;
         }
     }
