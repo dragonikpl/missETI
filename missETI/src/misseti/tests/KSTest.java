@@ -13,122 +13,77 @@ import java.util.Collections;
  */
 public class KSTest
 {
-    
+    double[] V;
     int eV;
     
     public KSTest()
     {
     }
     
-    public double[][] multiplyMatrix(double[][] matrix1, double[][] matrix2)
+    public double[] mMultiply(double[] A, double[] B, int m)
     {
-        int matrix1Rows = matrix1.length;
-        int matrix1Cols = matrix1[0].length;
-        int matrix2Rows = matrix2.length;
-        int matrix2Cols = matrix2[0].length;
+        double s;
+        double[] C = new double[m * m];
         
-        if (matrix1Cols != matrix2Rows)
+        for (int i = 0; i < m; i++)
         {
-            System.out.println("multiplyMatrix: Matrix sizes are invalid");
-            return null;
+            for (int j = 0; j < m; j++)
+            {
+                s = 0.0;
+                for (int k = 0; k < m; k++)
+                {
+                    s += A[i * m + k] * B[k * m + j]; 
+                }
+                
+                C[i * m + j] = s;
+            }
+        }
+        
+        return C;
+    }
+    
+    public void mPower(double[] A, int eA, int m, int n)
+    {
+        double[] B;
+        int eB;
+        
+        if (n == 1)
+        {
+            System.arraycopy(A, 0, V, 0, m * m);
+            
+            eV = eA;
+            
+            return;
+        }
+        
+        mPower(A, eA, m, n / 2);
+        B = mMultiply(V, V, m);
+        eB = 2 * eV;
+        
+        if (n % 2 == 0)
+        {
+            System.arraycopy(B, 0, V, 0, m * m);
+            eV = eB;
         }
         else
         {
-            double[][] result = new double[matrix1Rows][matrix2Cols];
-            
-            for (int i = 0; i < matrix1Rows; i++)
+            V = mMultiply(A, B, m);
+            eV = eA + eB;
+        }
+        
+        for (int i = 0; i < m * m; i++)
+        {
+            if (V[i] > 1.0e140)
             {
-                for (int j = 0; j < matrix2Cols; j++)
+                for (int j = 0; j < m * m; j++)
                 {
-                    for (int k = 0; k < matrix1Cols; k++)
-                    {
-                        result[i][j] += matrix1[i][k] * matrix2[k][j];
-                    }
+                    V[j] = V[j] * 1.0e-140;
                 }
+                
+                eV += 140;
             }
-            
-            return result;
         }
     }
-    
-    public double[][] powMatrix(double[][] matrix, int power)
-    {
-        int rows = matrix.length;
-        int cols = matrix[0].length;
-        
-        double[][] result = new double[rows][cols];
-        
-        if (power == 0)
-        {
-            return null;
-        }
-        else if (power == 1)
-        {
-            return matrix;
-        }
-        
-        for (int i = 0; i < rows; i++)
-        {
-            System.arraycopy(matrix[i], 0, result[i], 0, cols);
-        }
-        
-        ArrayList<Integer> rest = new ArrayList<Integer>();
-        
-        int p = power;
-        int c = 0;
-        
-        while (p != 1)
-        {
-            if (p % 2 == 0)
-            {
-                rest.add(c, (int)0);
-            }
-            else
-            {
-                rest.add(c, (int)1);
-            }
-            
-            p = (int)(p / 2);
-            c++;
-        }
-        
-        int loopCount = c;
-        eV = 0;
-        
-        for (int i = 0; i < loopCount; i++)
-        {
-            result = multiplyMatrix(result, result);
-
-            if ((Integer)rest.get(i) == 1)
-            {
-                result = multiplyMatrix(result, matrix);  
-            }
-            
-            eV = 2 * eV;
-            
-            for (int j = 0; j < rows; j++)
-            {
-                for (int k = 0; k < cols; k++)
-                {
-                    if (result[j][k] > 1.0e140)
-                    {
-                        for (int m = 0; m < rows; m++)
-                        {
-                            for (int n = 0; n < cols; n++)
-                            {
-                                result[m][n] = result[m][n] * 1.0e-140;
-                            }
-                            
-                            eV += 140;
-                        }
-                    }
-                }
-            }       
-        }
-        
-        return result;
-    }
-    
     
     
     public boolean runTest(double[] data)
@@ -221,18 +176,13 @@ public class KSTest
                         H[i * m + j] /= Double.valueOf(g);
                     }
                 }
-                
-                temp[i][j] = H[i * m + j];
             }
         }
         
-        temp = powMatrix(temp, valuesCount);
+        V = new double[m * m];
         
-        int index = (k - 1) * m + k - 1;
-        int i1 = (int)(index / m);
-        int i2 = index % m;
-        
-        double s = temp[i1][i2];
+        mPower(H, 0, m, valuesCount);
+        double s = V[(k - 1) * m + k - 1];
         
         for (int i = 1; i <= valuesCount; i++)
         {
