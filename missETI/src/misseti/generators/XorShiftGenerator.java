@@ -10,46 +10,40 @@ package misseti.generators;
  */
 public class XorShiftGenerator implements GenericGenerator
 {
-    private long x;
+    private long x = 123456789;
     private long y = 362436069;
     private long z = 521288629;
     private long w = 88675123;
+    private int a;
+    private int b;
+    private int c;
     
     public XorShiftGenerator()
     {
-        x = System.nanoTime();
+        a = 11;
+        b = 8;
+        c = 19;
     }
     
-    public XorShiftGenerator(long x, long y, long z, long w)
+    public XorShiftGenerator(int a, int b, int c)
     {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.w = w;
+        this.a = a;
+        this.b = b;
+        this.c = c;
     }
     
-    public long getRandom2()
+    @Override
+    public long getRandom()
     {
-        long temp, result;
+        long temp;
         
-        temp = x ^ (x << 11);
+        temp = x ^ (x << a);
         x = y;
         y = z;
         z = w;
         
-        w = w ^ (w >> 19) ^ (temp ^ (temp >> 8));
+        w = w ^ (w >> c) ^ (temp ^ (temp >> b));
         
         return w;
-    }
-    
-    @Override
-    public long getRandom() 
-    {
-        //http://javamex.com/tutorials/random_numbers/xorshift.shtml
-        
-        x ^= (x << 21);
-        x ^= (x >>> 35);
-        x ^= (x << 4);
-        return x;
     }
 }

@@ -1,7 +1,7 @@
 package misseti.generators;
 
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 
 public class InversiveGenerator implements GenericGenerator {
 
@@ -9,20 +9,21 @@ public class InversiveGenerator implements GenericGenerator {
     private int c = 23;
     private int M = (2 << 23) + 1;
     private int x;
-    private List allValues;
+    private int last;
 
     public InversiveGenerator() {
         x = (int) System.nanoTime();
-        allValues = new ArrayList<Integer>();
-        allValues.add(x);
+
+        last = x;
     }
+    
 
     @Override
     public long getRandom() {
 
         int next, previous;
 
-        previous = (Integer) allValues.get(allValues.size() - 1);
+        previous = last;
 
         if (previous != 0) {
             next = (a * modInverse(previous, M) + c) % M;
@@ -32,8 +33,8 @@ public class InversiveGenerator implements GenericGenerator {
             next = c;
         }
 
-        allValues.add(next);
-        return next;
+        last = Math.abs(next);
+        return Math.abs(next);
     }
 
     int modInverse(int x, int m) {

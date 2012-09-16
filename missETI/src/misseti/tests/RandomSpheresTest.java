@@ -46,6 +46,7 @@ public class RandomSpheresTest
         double[] pValues = new double[loops];
         points = new ArrayList<Point3D>();
         double minRadius, minRadius3;
+        Random gen = new Random();
         
         
         for (int loop = 0; loop < loops; loop++)
@@ -61,6 +62,13 @@ public class RandomSpheresTest
                 p.x = Double.valueOf(generator.getRandom() % edge);
                 p.y = Double.valueOf(generator.getRandom() % edge);
                 p.z = Double.valueOf(generator.getRandom() % edge);
+                
+                //System.out.println("X: " + p.x);
+                    
+                
+                //p.x = Double.valueOf(gen.nextInt((int)edge));
+                //p.y = Double.valueOf(gen.nextInt((int)edge));
+                //p.z = Double.valueOf(gen.nextInt((int)edge));
                 p.radius = MAXRADIUS;
 
                 for (Point3D neighbour : points)
@@ -86,8 +94,11 @@ public class RandomSpheresTest
             }
 
             double p = 1.0 - Math.exp(-1.0 * minRadius3 / 30.0);
+            System.out.println("rad: " + minRadius + " " + minRadius3);
             
             pValues[loop] = p;
+            
+            //System.out.println(p);
 
             System.out.println("MINRADIUS: " + minRadius);
             System.out.println("MINRADIUS3: " + minRadius3);
