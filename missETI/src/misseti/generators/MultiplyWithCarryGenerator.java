@@ -19,6 +19,6 @@ public class MultiplyWithCarryGenerator implements GenericGenerator {
     public long getRandom() {
 
         x_ = Math.abs(a_ * (x_ & 0xffffffffL)) + (x_ >>> 32);
-        return x_;
+        return (int) x_;
     }
 }

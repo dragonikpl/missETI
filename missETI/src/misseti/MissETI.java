@@ -9,6 +9,8 @@ import misseti.generators.MultiplyWithCarryGenerator;
 import misseti.generators.XorShiftGenerator;
 import misseti.tests.MinimalDistanceTest;
 import misseti.tests.RandomSpheresTest;
+import misseti.tests.GapTest;
+import misseti.generators.RandomGenerator;
 
 
 /**
@@ -24,16 +26,16 @@ public class MissETI {
     {
         
         
-        
+        //RandomGenerator gen = new RandomGenerator();
         //InversiveGenerator gen = new InversiveGenerator();
-        MultiplyWithCarryGenerator gen = new MultiplyWithCarryGenerator();
-        //XorShiftGenerator gen = new XorShiftGenerator(11, 8, 19);
-        //for (int i = 0; i < 120; i++) {
-        //    System.out.println(gen.getRandom());
+        //MultiplyWithCarryGenerator gen = new MultiplyWithCarryGenerator();
+        XorShiftGenerator gen = new XorShiftGenerator(11, 8, 19);
+        //for (int i = 0; i < 10000; i++) {
+        //    System.out.println(gen.getRandom()%1000);
         //}
         
-        
-        RandomSpheresTest test = new RandomSpheresTest(gen, 1000, 4000);
+        GapTest test = new GapTest(gen, 1000, 4000);
+        //RandomSpheresTest test = new RandomSpheresTest(gen, 1000, 4000);
         //MinimalDistanceTest test2 = new MinimalDistanceTest(gen, 1000, 8000);
         
         test.runTest();
