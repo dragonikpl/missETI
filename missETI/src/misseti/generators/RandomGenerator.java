@@ -12,9 +12,9 @@ public class RandomGenerator implements GenericGenerator  {
     }
     
     @Override
-    public long getRandom() {
-
-        return generator.nextInt(10000);
+    public long getRandom() 
+    {
+        return generator.nextInt();
     }
     
 }

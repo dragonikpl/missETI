@@ -92,7 +92,7 @@ public class MinimalDistanceTest
         
         KSTest ks = new KSTest();
         
-        boolean result;
+        boolean result;3
         result = ks.runTest(pValues);
         
         if (result == true)

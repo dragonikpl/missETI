@@ -59,9 +59,9 @@ public class RandomSpheresTest
             {
                 Point3D p = new Point3D();
                             
-                p.x = Double.valueOf(generator.getRandom() % edge);
-                p.y = Double.valueOf(generator.getRandom() % edge);
-                p.z = Double.valueOf(generator.getRandom() % edge);
+                p.x = Double.valueOf(Math.abs(generator.getRandom()) % edge);
+                p.y = Double.valueOf(Math.abs(generator.getRandom()) % edge);
+                p.z = Double.valueOf(Math.abs(generator.getRandom()) % edge);
                 
                 //System.out.println("X: " + p.x);
                     
